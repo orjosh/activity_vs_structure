@@ -94,6 +94,30 @@ def simulate_activity(G, shape_param, max_requests, method="weight_edges", rng=N
     df = pd.DataFrame({"freq": freqs})
     return df
 
+def load_all_csvs(folder, pattern=None):
+    if not str(folder).endswith("/"):
+        folder = folder + "/"
+
+    path_pattern = pattern
+    if pattern:
+        if not str(path_pattern).endswith(".csv"):
+            path_pattern = folder + pattern + ".csv"
+    else:
+        path_pattern = folder + "*.csv"
+
+    dataframes = []
+    names = []
+    # print(folder + path_pattern)
+    for p in Path(".").glob(folder + path_pattern):
+        filename = str(p).split(folder)[1]
+        filename = filename.split(".csv")[0]
+        names.append(filename)
+
+        data = pd.read_csv(str(p))
+        dataframes.append(data)
+
+    return dataframes, names
+
 def load_network_adjlist(folder, pattern=None):
     if not str(folder).endswith("/"):
         folder = folder + "/"
